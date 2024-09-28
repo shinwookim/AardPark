@@ -1,5 +1,4 @@
 from pymongo import MongoClient
-from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from flask import Flask
 from flask_cors import CORS
@@ -13,12 +12,11 @@ app = Flask(__name__)
 CORS(app, origins=["http://localhost:3000"])
 DEBUG = True
 SECRET_KEY = "devkey2024"
-SQLALCHEMY_DATABASE_URI = "sqlite:///" + Path(app.root_path / "aardpark.db")
 app.config.from_object(__name__)
 app.config.from_envvar("STEELHACKS_2024", silent=True)
 
 # configure SQLAlchemy
-uri = f"mongodb+srv://{getenv("MONGODB")}:{getenv("MONGODB_PASSWORD")}@{getenv("MONGODB_CONNECTION")}"
+uri = f"mongodb+srv://{getenv('MONGODB')}:{getenv('MONGODB_PASSWORD')}@{getenv('MONGODB_CONNECTION')}"
 client = MongoClient(uri, server_api=ServerApi("1"))
 db = client["mydatabase"]
 

@@ -18,3 +18,4 @@ typing-inspect==0.9.0
 typing_extensions==4.12.2
 Werkzeug==3.0.4
 pymongo==4.9.1
+python-dotenv==1.0.1

@@ -1,4 +1,4 @@
-from aardpark import app, db
+from aardpark import app, db, Availability
 from models import Availability
 from flask import request
 
@@ -14,8 +14,9 @@ def new_availability():
     req_data = request.get_json()
 
     # Add category item
-    new_parking = Availability(
-        req_data["parking_spot"], req_data["start_time"], req_data["end_time"]
-    )
-    db.session.add(new_parking)
-    db.session.commit()
+    new_parking = {
+        "parking_spot": req_data["parking_spot"], 
+        "start_time": req_data["start_time"], 
+        "end_time": req_data["end_time"]
+    }
+    Availability.insert_one(new_parking)
