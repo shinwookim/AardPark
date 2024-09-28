@@ -26,23 +26,76 @@ def initdb_command():
 
     print("Initialized the database.")
 
-#--------------------------------------------------- Listings ---------------------------------------------------#
+#--------------------------------------------------- Booking ---------------------------------------------------#
 
 # RESTful access to the list of listings
-@app.route("/listings/", methods=["GET"])
-def all_listings():
+@app.route("/booking/", methods=["GET"])
+def all_booking():
     pass
 
 # post a new listing
-@app.route("/listings/", methods=["POST"])
-def new_listing():
+@app.route("/booking/", methods=["POST"])
+def new_booking():
+    # Get json request data
+    req_data = request.get_json()
+
+    # Add category item
+    new_booking = Booking(req_data["purchaser"], 
+                           req_data["seller"], 
+                           req_data["parking_spot"], 
+                           req_data["start_time"], 
+                           req_data["end_time"])
+    db.session.add(new_booking)
+    db.session.commit()
+
+    # If returning a tuple, second arg can be a response code
+    return "Added Category: " + req_data["name"], 201
+
+#--------------------------------------------------- Individual Bookings ---------------------------------------------------#
+
+@app.route("/booking/<user_id>", methods=["GET"])
+def get_individual_booking():
     pass
 
-#--------------------------------------------------- Individual Listings ---------------------------------------------------#
+#--------------------------------------------------- Availability ---------------------------------------------------#
 
-@app.route("/listings/<user_id>", methods=["GET"])
-def get_individual_listing():
+@app.route("/availability/<spot_id>", methods=["GET"])
+def get_availability():
     pass
+
+
+@app.route("/availability/", methods=["POST"])
+def new_availability():
+    # Get json request data
+    req_data = request.get_json()
+
+    # Add category item
+    new_parking = Availability(req_data["parking_spot"], 
+                           req_data["start_time"], 
+                           req_data["end_time"])
+    db.session.add(new_parking)
+    db.session.commit()
+
+#--------------------------------------------------- Parking Spot ---------------------------------------------------#
+
+@app.route("/parking-spot/", methods=["GET"])
+def get_parking_spot():
+    pass
+
+
+@app.route("/parking-spot/", methods=["POST"])
+def new_parking_spot():
+    # Get json request data
+    req_data = request.get_json()
+
+    # Add category item
+    new_parking = ParkingSpot(req_data["owner"], 
+                           req_data["name"], 
+                           req_data["latitiude"],
+                           req_data["longitude"],
+                           req_data["img_path"])
+    db.session.add(new_parking)
+    db.session.commit()
 
 
 #--------------------------------------------------- Users ---------------------------------------------------#
@@ -54,20 +107,21 @@ def get_user():
 
 @app.route("/users/", methods=["POST"])
 def new_user():
-    pass
+    # Get json request data
+    req_data = request.get_json()
 
-#--------------------------------------------------- Chat ---------------------------------------------------#
-
-@app.route("/chat/<user_id>", methods=["GET"])
-def all_chats():
-    pass
-
-
-@app.route("/chat/", methods=["POST"])
-def new_chat():
-    pass
+    # Add category item
+    new_user = User(req_data["email"], 
+                           req_data["name"], 
+                           req_data["password"])
+    db.session.add(new_user)
+    db.session.commit()
 
 #--------------------------------------------------- Messages ---------------------------------------------------#
+
+@app.route("/chat/", methods=["GET"])
+def all_chats():
+    pass
 
 @app.route("/chat/<chat_id>", methods=["GET"])
 def all_messages():
@@ -76,4 +130,13 @@ def all_messages():
 
 @app.route("/chat/", methods=["POST"])
 def new_chat_message():
-    pass
+    # Get json request data
+    req_data = request.get_json()
+
+    # Add category item
+    new_chat_message = ChatMessage(req_data["date"], 
+                           req_data["sender"], 
+                           req_data["receiver"], 
+                           req_data["message"])
+    db.session.add(new_chat_message)
+    db.session.commit()
