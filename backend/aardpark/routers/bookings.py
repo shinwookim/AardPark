@@ -1,9 +1,6 @@
 from fastapi import APIRouter, Query, Path
 from typing import Annotated
 from aardpark.database import Booking
-import json
-from bson import json_util
-from bson.json_util import loads, dumps
 router = APIRouter()
 from pydantic import BaseModel
 
