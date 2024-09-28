@@ -1,11 +1,21 @@
 <div class="listings-container">
-<h2>Available spots near LOCATION GOES HERE </h2>
-<div *ngFor="let listing of parkingListings" class="listings">
-    <div class="listing-item">
-        <h3>{{ listing.name }}</h3>
-        <h2>{{ listing.address}}</h2>
-        <h2>${{ listing.price }} / hr</h2>
-        <button type="button">Book now</button>
-    </div>
+<div class="topbar">
+    <h2>Available spots near LOCATION GOES HERE </h2>
+    <button (click)="toggleView()" class="toggle-button">{{ isListView ? 'Map View' : 'List View'}}</button>
 </div>
+
+    <div *ngIf="isListView">
+        <div *ngFor="let listing of parkingListings" class="listings">
+            <div class="listing-item">
+                <h3>{{ listing.name }}</h3>
+                <h2>{{ listing.address}}</h2>
+                <h2>${{ listing.price }} / hr</h2>
+                <button type="button">Book now</button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!isListView">
+        <app-map-view [parkingListings]="parkingListings"></app-map-view>
+    </div>
 </div>
