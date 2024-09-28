@@ -1,9 +1,5 @@
 from pymongo import MongoClient
-from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from flask import Flask
-from flask_cors import CORS
-from pathlib import Path
 from dotenv import load_dotenv
 from os import getenv
 
