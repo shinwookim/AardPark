@@ -1,0 +1,11 @@
+.listing-item {
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    border: 2px solid gray;
+}
+
+.listing-item * {
+    margin-top: -1px;
+}
