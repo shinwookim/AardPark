@@ -75,7 +75,7 @@ class Booking(db.Model):
         self.end_time = end_time
 
     def __repr__(self):
-        return f"<Booking {self.id}: {self.user} >"
+        return f"<Booking {self.id}: <{self.purchaser}, {self.seller}> on {self.parking_spot}>"
 
 
 class Availability(db.Model):
