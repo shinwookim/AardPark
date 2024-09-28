@@ -1,4 +1,4 @@
-.sign-up-container {
+.login-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -77,14 +77,15 @@
             }
         }
 
-		.already-account {
+		.no-account {
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			gap: 6px;
 
-			#login-text {
+			#sign-up-text {
 				color:rgb(191, 191, 4);
+				cursor: pointer;
 			}
 		}
     }
