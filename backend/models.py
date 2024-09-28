@@ -46,11 +46,13 @@ class ParkingSpot(db.Model):
 
 class ChatMessage(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    date = db.Column(db.DateTime)
     sender = db.Column(db.Integer, db.ForeignKey("user.id"))
     receiver = db.Column(db.Integer, db.ForeignKey("user.id"))
     message = db.Column(db.String(200))
 
-    def __init__(self, sender, receiver, message):
+    def __init__(self, date, sender, receiver, message):
+        self.date = date
         self.sender = sender
         self.receiver = receiver
         self.message = message
@@ -75,7 +77,7 @@ class Booking(db.Model):
         self.end_time = end_time
 
     def __repr__(self):
-        return f"<Booking {self.id}: {self.user} >"
+        return f"<Booking {self.id}: <{self.purchaser}, {self.seller}> on {self.parking_spot}>"
 
 
 class Availability(db.Model):
