@@ -6,7 +6,7 @@ from os import getenv
 load_dotenv()  # take environment variables from .env.
 
 # configure SQLAlchemy
-uri = f"mongodb+srv://{getenv("MONGODB")}:{getenv("MONGODB_PASSWORD")}@{getenv("MONGODB_CONNECTION")}"
+uri = f'mongodb+srv://{getenv("MONGODB_USERNAME")}:{getenv("MONGODB_PASSWORD")}@{getenv("MONGODB_CONNECTION")}'
 client = MongoClient(uri, server_api=ServerApi("1"))
 db = client["mydatabase"]
 
