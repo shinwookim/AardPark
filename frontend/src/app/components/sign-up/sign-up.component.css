@@ -73,13 +73,15 @@
                 width: 100%;
                 height: 40px;
 				border-radius: 10px;
+				font-size: 20px;
             }
         }
 
 		.already-account {
-			margin-top: 10px;
 			display: flex;
 			justify-content: center;
+			align-items: center;
+			gap: 6px;
 
 			#login-text {
 				color:rgb(191, 191, 4);
