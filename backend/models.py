@@ -46,11 +46,13 @@ class ParkingSpot(db.Model):
 
 class ChatMessage(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    date = db.Column(db.DateTime)
     sender = db.Column(db.Integer, db.ForeignKey("user.id"))
     receiver = db.Column(db.Integer, db.ForeignKey("user.id"))
     message = db.Column(db.String(200))
 
-    def __init__(self, sender, receiver, message):
+    def __init__(self, date, sender, receiver, message):
+        self.date = date
         self.sender = sender
         self.receiver = receiver
         self.message = message
