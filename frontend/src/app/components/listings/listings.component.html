@@ -1,0 +1,11 @@
+<div class="listings-container">
+<h2>Available spots near LOCATION GOES HERE </h2>
+<div *ngFor="let listing of parkingListings" class="listings">
+    <div class="listing-item">
+        <h3>{{ listing.name }}</h3>
+        <h2>{{ listing.address}}</h2>
+        <h2>${{ listing.price }} / hr</h2>
+        <button type="button">Book now</button>
+    </div>
+</div>
+</div>
