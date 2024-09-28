@@ -1,9 +1,6 @@
 from typing import Annotated
 from fastapi import APIRouter, Query
 from datetime import datetime
-
-from bson import json_util
-import json
 from pymongo.results import InsertOneResult
 from aardpark.database import Availability, ParkingSpot
 

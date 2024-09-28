@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Query, Path
 from typing import Annotated
 from aardpark.database import Availability
-import json
-from bson import json_util
 
 router = APIRouter()
 
