@@ -6,8 +6,22 @@
         <div class="navigation-links">
             <a routerLink="/home">Home</a>
             <a routerLink="/listings">Listings</a>
-            <a routerLink="/login">Login</a>
-            <a class="sign-up-button" routerLink="/sign-up">Sign Up</a>
         </div>
     </div>
+    <div class="navigation-links">
+      <a routerLink="/home">Home</a>
+      <button *ngIf="!user" (click)="login()">Login</button>
+      <div *ngIf="user" class="user-menu">
+        <img
+          [src]="user.picture"
+          alt="Profile"
+          (click)="toggleMenu($event)"
+          class="profile-pic"
+        />
+        <ul *ngIf="menuOpen" class="dropdown-menu">
+          <li (click)="logout()">Logout</li>
+        </ul>
+      </div>
+    </div>    
+  </div>
 </div>
