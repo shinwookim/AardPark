@@ -34,7 +34,12 @@ def get_parking_spot(
                 "$maxDistance": radius_in_miles / EARTH_RADIUS_IN_MILES,
             }
         },
-        # TODO: Add a query to filter parking spots that are available between start_time and end_time
+        "start_time" : { 
+            "$gte" : start_time 
+        }, 
+        "end_time" : { 
+            "$lte" : end_time 
+        }
     }
     query_result = Availability.find(query, {"_id":0})
     return list(query_result)
