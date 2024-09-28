@@ -1,6 +1,6 @@
 from aardpark import app, db
 from models import Availability
-from flask import session, request
+from flask import request
 
 
 @app.route("/availability/<spot_id>", methods=["GET"])
