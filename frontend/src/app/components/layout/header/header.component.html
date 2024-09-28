@@ -1,27 +1,23 @@
 <div class="header-container">
-    <div class="nav-row">
-        <div>
-            <a routerLink="/home"><img src="assets/images/aardpark-nologo.svg" alt="Logo"></a>
-        </div>
-        <div class="navigation-links">
-            <a routerLink="/home">Home</a>
-            <a routerLink="/listings">Listings</a>
-        </div>
-    </div>
-    <div class="navigation-links">
-      <a routerLink="/home">Home</a>
-      <button *ngIf="!user" (click)="login()">Login</button>
-      <div *ngIf="user" class="user-menu">
-        <img
-          [src]="user.picture"
-          alt="Profile"
-          (click)="toggleMenu($event)"
-          class="profile-pic"
-        />
-        <ul *ngIf="menuOpen" class="dropdown-menu">
-          <li (click)="logout()">Logout</li>
-        </ul>
-      </div>
-    </div>    
-  </div>
+	<div class="nav-row">
+			<div>
+					<a routerLink="/home"><img src="assets/images/aardpark-nologo.svg" alt="Logo"></a>
+			</div>
+			<div class="navigation-links">
+				<a routerLink="/home">Home</a>
+				<a routerLink="/listings">Listings</a>
+				<button *ngIf="!user" (click)="login()">Login</button>
+				<div *ngIf="user" class="user-menu">
+					<img
+						[src]="user.picture"
+						alt="Profile"
+						(click)="toggleMenu($event)"
+						class="profile-pic"
+					/>
+					<ul *ngIf="menuOpen" class="dropdown-menu">
+						<li (click)="logout()">Logout</li>
+					</ul>
+				</div>
+			</div> 
+	</div>   
 </div>
