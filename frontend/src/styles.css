@@ -1,3 +1,14 @@
-body {
-    font-family: Helvetica, Arial, sans-serif;
+html, body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html, body, app-root {
+	height: 100%;
+}
+
+app-root {
+	display: flex;
+	flex-direction: column;
 }
