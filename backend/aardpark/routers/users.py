@@ -8,31 +8,13 @@ from werkzeug.security import check_password_hash, generate_password_hash
 router = APIRouter()
 
 
-@router.post("/login")
+@router.post("/authenticate")
 def login():
-    """
-    This is a login endpoint.
-    """
     pass
 
 
-@router.get("/logout")
+@router.get("/deauthenticate")
 def logout():
-    """
-    This is a logout endpoint.
-    """
-    pass
-
-
-@router.get("/users/{user_email}")
-def get_user(
-    user_email: Annotated[
-        str, Path(description="User email address, which also serve as their username")
-    ],
-):
-    """
-    Returns the user information.
-    """
     pass
 
 
