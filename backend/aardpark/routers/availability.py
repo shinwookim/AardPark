@@ -8,8 +8,7 @@ router = APIRouter()
 
 @router.get("/availability/{spot_id}")
 def get_availability(spot_id: Annotated[str, Path(description="The ID of the parking spot to query.")]):
-    myquery = {"parking_spot": spot_id}
-    query_result = Availability.find(myquery)
+    query_result = Availability.find({"parking_spot": spot_id}, {"_id":0})
     
     response = json.loads(json_util.dumps(query_result))
     return response

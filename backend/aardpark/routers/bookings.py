@@ -16,9 +16,9 @@ class Bookings(BaseModel):
 
 @router.get("/booking/")
 def get_all_bookings():
-    query_result = Booking.find()
+    query_result = Booking.find({},{"_id":0})
     
-    response = json.loads(json_util.dumps(query_result))
+    response = list(query_result)
     return response
 
 
@@ -45,6 +45,4 @@ def get_individual_booking(user_id: Annotated[str, Path(description="The user id
     seller = Booking.find({"seller": user_id}, {"_id":0})
 
     response = {"purchaser": list(purchaser), "seller": list(seller)}
-    # response = [dict_data for id, dict_data in purchaser]
-    # print(response["purchaser"]["parking_spot"])
     return response

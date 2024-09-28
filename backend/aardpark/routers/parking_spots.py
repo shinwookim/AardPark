@@ -36,8 +36,8 @@ def get_parking_spot(
         },
         # TODO: Add a query to filter parking spots that are available between start_time and end_time
     }
-    query_result = Availability.find(query)
-    return json.loads(json_util.dumps(query_result))
+    query_result = Availability.find(query, {"_id":0})
+    return list(query_result)
 
 
 @router.post("/parking-spot/")
