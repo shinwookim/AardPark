@@ -12,7 +12,7 @@ class Auth0:
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
         }
-        response = requests.get(f"{self.token}/userinfo", headers=headers)
+        response = requests.get(f"{self.api}/userinfo", headers=headers)
         return response.json()
 
     def get_user_email_from_token(self, token: str) -> str:
