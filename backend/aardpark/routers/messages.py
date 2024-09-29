@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, Path
 from pydantic import BaseModel
 from typing import Annotated
 from pymongo.results import InsertOneResult
@@ -28,9 +28,11 @@ def all_user_chats(
     return sent_messages + received_messages
 
 
-@router.get("/chat/{chat_id}")
-def all_messages():
-    pass
+@router.get("/chat/{booking_id}")
+def all_messages(
+    booking_id: Annotated[int, Path(description="The booking ID")],
+):
+    return list(ChatMessage.find({"booking_id": booking_id}, {"_id": 0}))
 
 
 @router.post("/chat/")
