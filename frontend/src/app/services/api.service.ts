@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment.prod';
 import { ParkingSpot } from '../data-classes/ParkingSpot';
 import { Booking } from '../data-classes/Booking';
 import { GeocodeLocation } from '../data-classes/GeocodeLocation';
+import { BookingCollection } from '../data-classes/BookingCollection';
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +36,8 @@ export class ApiService {
     return this.http.get<ParkingSpot[]>(encodeURI(url));
   }
   
-  _getListing(spotId: string): Observable<ParkingSpot[]> {
-		return this.http.get<ParkingSpot[]>(encodeURI(`${this.apiUrl}/booking/${spotId}`));
+  _getParkingSpot(spotId: string): Observable<ParkingSpot> {
+		return this.http.get<ParkingSpot>(encodeURI(`${this.apiUrl}/parking-spot/${spotId}`));
 	}
 
 	_newParkingSpot(name: string, desc: string, lat: number, long: number, start: string, end: string, price: string) {
@@ -88,12 +89,9 @@ export class ApiService {
 			})
 		);
 	}
-	_getBooking(spotId: string): Observable<Booking[]> {
-		return this.http.get<Booking[]>(encodeURI(`${this.apiUrl}/booking/`));
-	}
 
-	_getIndividualBooking(userId: string): Observable<Booking> {
-		return this.http.get<Booking>(encodeURI(`${this.apiUrl}/booking/${userId}`));
+	_getIndividualBooking(userId: string): Observable<BookingCollection> {
+		return this.http.get<BookingCollection>(encodeURI(`${this.apiUrl}/booking/${userId}`));
 	}
 }
 
