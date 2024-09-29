@@ -33,6 +33,7 @@ fastapi run main.py
 ```bash
 cd ./frontend
 npm install
+ng serve
 ```
 
 
