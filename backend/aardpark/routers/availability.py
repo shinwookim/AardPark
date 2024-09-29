@@ -18,7 +18,7 @@ def new_availability(parking_spot: Annotated[str, Query(description="The ID of t
                      start_time: Annotated[str, Query(description="The start time of the availability.")], 
                      end_time: Annotated[str, Query(description="The end time of the availability.")], 
                      latitude: Annotated[float, Query(description="The latitude of the spot.")], 
-                     longitude: Annotated[float, Query(description="The latitude of the spot.")]):
+                     longitude: Annotated[float, Query(description="The longitude of the spot.")]):
     temp_start = datetime.strptime(start_time, '%Y/%m/%d %H:%M')
     temp_start_plus_one = datetime.strptime(start_time, '%Y/%m/%d %H:%M') + timedelta(hours=1)
     temp_end = datetime.strptime(end_time, '%Y/%m/%d %H:%M')
@@ -32,6 +32,31 @@ def new_availability(parking_spot: Annotated[str, Query(description="The ID of t
             "location": {"type": "Point", "coordinates": [latitude, longitude]},
         }
         Availability.insert_one(new_parking)
+
+        temp_start = temp_start_plus_one
+        temp_start_plus_one = temp_start_plus_one + timedelta(hours=1)
+
+@router.delete("/availability")
+def delete_availability(parking_spot: Annotated[str, Query(description="The ID of the parking spot to add to the availability.")], 
+                     start_time: Annotated[str, Query(description="The start time of the availability.")], 
+                     end_time: Annotated[str, Query(description="The end time of the availability.")], 
+                     latitude: Annotated[float, Query(description="The latitude of the spot.")], 
+                     longitude: Annotated[float, Query(description="The longitude of the spot.")]):
+    
+    temp_start = datetime.strptime(start_time, '%Y/%m/%d %H:%M')
+    temp_start_plus_one = datetime.strptime(start_time, '%Y/%m/%d %H:%M') + timedelta(hours=1)
+    temp_end = datetime.strptime(end_time, '%Y/%m/%d %H:%M')
+
+    while temp_start != temp_end:
+        # Add item
+        parking_to_del = {
+            "parking_spot": parking_spot, 
+            "start_time": temp_start.strftime("%Y/%m/%d %H:%M"), 
+            "end_time": temp_start_plus_one.strftime("%Y/%m/%d %H:%M"),
+            "location": {"type": "Point", "coordinates": [latitude, longitude]},
+        }
+
+        Availability.delete_one(parking_to_del)
 
         temp_start = temp_start_plus_one
         temp_start_plus_one = temp_start_plus_one + timedelta(hours=1)
