@@ -1,23 +1,33 @@
 <div class="page-container" style="max-width: 800px; margin: auto;">
     <div class="results-container">
-      <h2>My Listings</h2>
+      <h1 id="title">My Listings</h1>
   
-      <h2>Purchased Spots</h2>
+      <h1>Purchased Spots</h1>
       <div class="listings">
         <p *ngIf="purchasedListings.length === 0">No spots purchased yet.</p>
         <div *ngFor="let listing of purchasedListings" class="listing-item">
             <div class="top-row">
-                <h2>{{ listing.name }}</h2>
-                <p>{{ formatTime(listing.start_time) }} - {{ formatTime(listing.end_time) }}</p>
+							<div>
+								<h2>{{ listing.name }}</h2>
+								<p>{{ listing.description }}</p>
+								<h3>${{ listing.price }}/hr</h3>
+								<p>Owner: {{ listing.owner }}</p>
+							</div>						
+							<div class="left-icons">
+								<div class="icon-row">
+									<span class="material-symbols-outlined">date_range</span>
+									<p>{{ listing != null ? formatDate(listing.start_time) : "N/A" }}</p>
+								</div>
+								<div class="icon-row">
+									<span class="material-symbols-outlined">schedule</span>
+									<p>{{ listing != null ? formatTime(listing.start_time) : "N/A" }} - {{ listing != null ? formatTime(listing.end_time) : "N/A" }}</p>
+								</div>
+							</div>
             </div>
-            <p>{{ formatDate(listing.start_time) }}</p>
-            <p>{{ listing.description }}</p>
-            <h3>${{ listing.price }}/hr</h3>
-            <p>Owner: {{ listing.owner }}</p>
         </div>
       </div>
   
-      <h2>Sold Spots</h2>
+      <h1>Sold Spots</h1>
       <div class="listings">
         <p *ngIf="soldListings.length === 0">No spots sold yet.</p>
         <div *ngFor="let listing of soldListings" class="listing-item">
