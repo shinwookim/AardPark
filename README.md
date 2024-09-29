@@ -26,7 +26,7 @@ cd AardPark
 cd ./backend
 # Provide MongoDB credentials in .env file (see `template.env` for reference)
 pip install -r requirements.txt
-fastapi run main
+fastapi run main.py
 ```
 
 
