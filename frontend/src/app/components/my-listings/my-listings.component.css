@@ -1,0 +1,10 @@
+body {
+    max-width: 900px;
+    margin: auto;
+}
+
+.listing-item {
+    border: 1.5px solid black;
+    padding: 20px;
+    border-radius: 16px;
+}

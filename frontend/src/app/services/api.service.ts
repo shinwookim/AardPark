@@ -34,6 +34,10 @@ export class ApiService {
 		if (endTime) url += `&end_time=${endTime}`
     return this.http.get<ParkingSpot[]>(encodeURI(url));
   }
+  
+  _getListing(spotId: string): Observable<ParkingSpot[]> {
+		return this.http.get<ParkingSpot[]>(encodeURI(`${this.apiUrl}/booking/${spotId}`));
+	}
 
 	_newParkingSpot(name: string, desc: string, lat: number, long: number, start: string, end: string, price: string) {
 		const params = 
@@ -92,3 +96,4 @@ export class ApiService {
 		return this.http.get<Booking>(encodeURI(`${this.apiUrl}/booking/${userId}`));
 	}
 }
+

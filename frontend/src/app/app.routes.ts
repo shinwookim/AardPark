@@ -3,6 +3,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { ListingsComponent } from './components/listings/listings.component';
 import { CreateListingComponent } from './components/create-listing/create-listing.component';
+import { MyListingsComponent } from './components/my-listings/my-listings.component';
 
 export const routes: Routes = [
 	// Redirect root page to home
@@ -11,5 +12,6 @@ export const routes: Routes = [
 	{ path: 'home', component: HomeComponent },
 	{ path: 'listings', component: ListingsComponent },
 	{ path: 'create-listing', component: CreateListingComponent },
-	{ path: 'login', component: LoginComponent }
+	{ path: 'login', component: LoginComponent },
+	{ path: 'my-listings', component: MyListingsComponent}
 ];
