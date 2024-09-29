@@ -14,3 +14,7 @@ body {
     flex-direction: row;
     justify-content: space-between;
 }
+
+.listings {
+    line-height: 15px;
+}

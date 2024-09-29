@@ -14,7 +14,6 @@ import { ParkingSpot } from '../../data-classes/ParkingSpot';
   styleUrl: './my-listings.component.css'
 })
 
-
 export class MyListingsComponent implements OnInit {
   soldListings: ParkingSpot[] = [];
 	purchasedListings: ParkingSpot[] = [];
