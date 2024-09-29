@@ -51,6 +51,9 @@ def get_parking_spot(
 @router.post("/parking-spot/")
 def new_parking_spot(
     name: Annotated[str, Query(description="The name of the parking spot")],
+    description: Annotated[
+        str, Query(description="The description of the parking spot")
+    ],
     latitude: Annotated[float, Query(description="The latitude of the parking spot")],
     longitude: Annotated[float, Query(description="The longitude of the parking spot")],
     owner_username: Annotated[
@@ -79,6 +82,7 @@ def new_parking_spot(
             {
                 "parking_spot": spot_id,
                 "name": name,
+                "description": description,
                 "location": {"type": "Point", "coordinates": [latitude, longitude]},
                 "owner": owner_username,
                 "price": price,
