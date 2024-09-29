@@ -3,6 +3,7 @@ from fastapi import APIRouter, Query
 from datetime import datetime
 from pymongo import GEO2D
 from pymongo.results import InsertOneResult
+from bson import ObjectId
 from aardpark.database import Availability, ParkingSpot
 
 # https://www.space.com/17638-how-big-is-earth.html
@@ -36,8 +37,19 @@ def get_parking_spot(
         "start_time": {"$gte": start_time},
         "end_time": {"$lte": end_time},
     }
-    query_result = Availability.find(query, {"_id": 0})
-    return list(query_result)
+    availability_query_result = list(Availability.find(query, {"_id": 0}))
+    print(availability_query_result)
+    parking_spot_ids = set(
+        [availability["parking_spot"] for availability in availability_query_result]
+    )
+    parking_spots_info = dict()
+    for spot_id in parking_spot_ids:
+        parking_spots_info[spot_id] = ParkingSpot.find_one(
+            {"_id": ObjectId(spot_id)}, {"_id": 0}
+        )
+    for availability in availability_query_result:
+        availability["parking_spot"] = parking_spots_info[availability["parking_spot"]]
+    return list(availability_query_result)
 
 
 @router.post("/parking-spot/")
@@ -45,8 +57,8 @@ def new_parking_spot(
     name: Annotated[str, Query(description="The name of the parking spot")],
     latitude: Annotated[float, Query(description="The latitude of the parking spot")],
     longitude: Annotated[float, Query(description="The longitude of the parking spot")],
-    owner_id: Annotated[
-        int, Query(description="The ID of the owner of the parking spot")
+    owner_username: Annotated[
+        str, Query(description="The ID of the owner of the parking spot")
     ],
     price: Annotated[float, Query(description="The hourly price of the parking spot")],
 ):
@@ -58,7 +70,7 @@ def new_parking_spot(
         {
             "name": name,
             "location": {"type": "Point", "coordinates": [latitude, longitude]},
-            "owner_id": owner_id,
+            "owner": owner_username,
             "price": price,
         }
     )
