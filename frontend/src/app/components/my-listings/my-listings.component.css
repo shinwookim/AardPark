@@ -1,15 +1,10 @@
 body {
-    max-width: 800px;
+    max-width: 900px;
     margin: auto;
 }
 
-.listings {
+.listing-item {
+    border: 1.5px solid black;
     padding: 20px;
     border-radius: 16px;
-  }
-
-  .listing-item {
-    border: 1px solid black;
-    padding: 20px;
-    border-radius: 16px;
-  }
+}

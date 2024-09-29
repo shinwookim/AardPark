@@ -2,7 +2,7 @@
     <div class="results-container">
       <h2>My Listings</h2>
   
-      <h3>Purchased Spots</h3>
+      <h2>Purchased Spots</h2>
       <div class="listings">
         <p *ngIf="purchasedListings.length === 0">No spots purchased yet.</p>
         <div *ngFor="let listing of purchasedListings" class="listing-item">
@@ -15,7 +15,7 @@
         <p *ngIf="purchasedListings.length === 0">No spots purchased yet.</p>
       </div>
   
-      <h3>Sold Spots</h3>
+      <h2>Sold Spots</h2>
       <div class="listings">
         <p *ngIf="soldListings.length === 0">No spots sold yet.</p>
         <div *ngFor="let listing of soldListings" class="listing-item">
