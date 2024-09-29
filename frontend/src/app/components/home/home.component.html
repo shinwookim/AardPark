@@ -5,7 +5,7 @@
 
     <div class="custom-input-group">
         <span class="material-symbols-outlined">location_on</span>
-        <input type="text" class="form-control" placeholder="Where would you like to park?">
+        <input type="text" class="form-control" placeholder="Where would you like to park?" [(ngModel)]="searchString">
         <button class="btn-submit" (click)="quickSearch()">→</button>
     </div>
 

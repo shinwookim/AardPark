@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthService } from '@auth0/auth0-angular';
+import { AuthService, User } from '@auth0/auth0-angular';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 import { ParkingSpot } from '../data-classes/ParkingSpot';
@@ -13,29 +13,68 @@ import { GeocodeLocation } from '../data-classes/GeocodeLocation';
 export class ApiService {
 
 	private apiUrl = 'http://localhost:8000';
+	private user!: User;
 
-  constructor(private http: HttpClient, private auth: AuthService) { }
+  constructor(private http: HttpClient, private auth: AuthService) {
+		this.auth.user$.subscribe({
+			next: (user) => {
+				if (user) {
+					this.user = user;
+				}
+			},
+			error: (error) => {
+				console.log("Login failed: ", error);
+			}
+		})
+	}
 
-	_getParkingSpots(lat: string, lon: string, radius: string, startTime: string, endTime: string): Observable<ParkingSpot[]> {
-    	return this.http.get<ParkingSpot[]>(encodeURI(`${this.apiUrl}/parking-spot/?latitude=${lat}&longitude=${lon}&radius_in_miles=${radius}&start_time=${startTime}&end_time=${endTime}`));
-  	}
-
-	_getListing(spotId: string): Observable<ParkingSpot[]> {
+	_getParkingSpots(lat: number, lon: number, radius: string, startTime?: string, endTime?: string): Observable<ParkingSpot[]> {
+		let url = `${this.apiUrl}/parking-spot/?latitude=${lat}&longitude=${lon}&radius_in_miles=${radius}`
+		if (startTime) url += `&start_time=${startTime}`;
+		if (endTime) url += `&end_time=${endTime}`
+    return this.http.get<ParkingSpot[]>(encodeURI(url));
+  }
+  
+  _getListing(spotId: string): Observable<ParkingSpot[]> {
 		return this.http.get<ParkingSpot[]>(encodeURI(`${this.apiUrl}/booking/${spotId}`));
 	}
 
-	_newParkingSpot(name: string, desc: string, lat: number, long: number, username: string, start: string, end: string) {
-		let data = {"name": name, "description": desc, "latitude": lat, "longitude": long, "owner_username": username, "start_time": start, "end_time": end};
-		this.http.post(encodeURI(`${this.apiUrl}/parking-spot/`), data);
-	}
+	_newParkingSpot(name: string, desc: string, lat: number, long: number, start: string, end: string, price: string) {
+		const params = 
+			`name=${name}` +
+			`&description=${desc}` +
+			`&latitude=${lat}` +
+			`&longitude=${long}` +
+			`&owner_username=${this.user.email}` +
+			`&start_time=${start}` +
+			`&end_time=${end}` +
+			`&price=${price}`;
+	
+		this.http.post(`${this.apiUrl}/parking-spot/?${params}`, {}).subscribe();
+	}	
 
-	_newBooking(spotId: string, start: string, end: string, purchaser: string, seller: string) {
-		let data_post = {"purchaser": purchaser, "seller": seller, "parking_spot": spotId, "start_time":start, "end_time":end}
-		this.http.post(encodeURI(`${this.apiUrl}/booking/?`), data_post);
-
-		let data_put = { "parking_spot": spotId, "start_time": start, "end_time": end};
-		this.http.put(encodeURI(`${this.apiUrl}/parking_spot_availability/`), data_put);
+	_newBooking(spotId: string, start: string, end: string, seller: string) {
+		// Concatenate query parameters for the POST request
+		const postParams = 
+			`purchaser=${this.user.email}` +
+			`&seller=${seller}` +
+			`&parking_spot=${spotId}` +
+			`&start_time=${start}` +
+			`&end_time=${end}`;
+	
+		// POST request with query parameters
+		this.http.post(`${this.apiUrl}/booking/?${postParams}`, null).subscribe();
+	
+		// Concatenate query parameters for the PUT request
+		const putParams = 
+			`parking_spot=${spotId}` +
+			`&start_time=${start}` +
+			`&end_time=${end}`;
+	
+		// PUT request with query parameters
+		this.http.put(`${this.apiUrl}/parking_spot_availability/?${putParams}`, null).subscribe();
 	}
+	
 
 	_getLatLonFromAddress(address: string): Observable<GeocodeLocation> {
 		const formattedAddress = address.replaceAll(" ", "+");
@@ -49,12 +88,12 @@ export class ApiService {
 			})
 		);
 	}
-	_getBooking(): Observable<Booking[]> {
+	_getBooking(spotId: string): Observable<Booking[]> {
 		return this.http.get<Booking[]>(encodeURI(`${this.apiUrl}/booking/`));
 	}
 
 	_getIndividualBooking(userId: string): Observable<Booking> {
 		return this.http.get<Booking>(encodeURI(`${this.apiUrl}/booking/${userId}`));
 	}
-	
 }
+
