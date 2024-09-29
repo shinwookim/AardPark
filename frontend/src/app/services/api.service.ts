@@ -49,13 +49,28 @@ export class ApiService {
 		this.http.post(`${this.apiUrl}/parking-spot/?${params}`, {}).subscribe();
 	}	
 
-	_newBooking(spotId: string, start: string, end: string, purchaser: string, seller: string) {
-		let data_post = {"purchaser": purchaser, "seller": seller, "parking_spot": spotId, "start_time":start, "end_time":end}
-		this.http.post(encodeURI(`${this.apiUrl}/booking/?`), data_post).subscribe();
-
-		let data_put = { "parking_spot": spotId, "start_time": start, "end_time": end};
-		this.http.put(encodeURI(`${this.apiUrl}/parking_spot_availability/`), data_put).subscribe();
+	_newBooking(spotId: string, start: string, end: string, seller: string) {
+		// Concatenate query parameters for the POST request
+		const postParams = 
+			`purchaser=${this.user.email}` +
+			`&seller=${seller}` +
+			`&parking_spot=${spotId}` +
+			`&start_time=${start}` +
+			`&end_time=${end}`;
+	
+		// POST request with query parameters
+		this.http.post(`${this.apiUrl}/booking/?${postParams}`, null).subscribe();
+	
+		// Concatenate query parameters for the PUT request
+		const putParams = 
+			`parking_spot=${spotId}` +
+			`&start_time=${start}` +
+			`&end_time=${end}`;
+	
+		// PUT request with query parameters
+		this.http.put(`${this.apiUrl}/parking_spot_availability/?${putParams}`, null).subscribe();
 	}
+	
 
 	_getLatLonFromAddress(address: string): Observable<GeocodeLocation> {
 		const formattedAddress = address.replaceAll(" ", "+");
@@ -76,5 +91,4 @@ export class ApiService {
 	_getIndividualBooking(userId: string): Observable<Booking> {
 		return this.http.get<Booking>(encodeURI(`${this.apiUrl}/booking/${userId}`));
 	}
-	
 }
