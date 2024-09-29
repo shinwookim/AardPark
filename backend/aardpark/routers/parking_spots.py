@@ -16,9 +16,15 @@ router = APIRouter()
 def get_parking_spot(
     latitude: Annotated[float, Query(description="The latitude of the parking spot")],
     longitude: Annotated[float, Query(description="The longitude of the parking spot")],
-    radius_in_miles: Annotated[float, Query(description="The radius in miles")],
-    start_time: Annotated[str, Query(description="The start time of reservation")],
-    end_time: Annotated[str, Query(description="The end time of the reservation")],
+    radius_in_miles: (
+        Annotated[float, Query(description="The radius in miles")] | None
+    ) = None,
+    start_time: (
+        Annotated[str, Query(description="The start time of reservation")] | None
+    ) = None,
+    end_time: (
+        Annotated[str, Query(description="The end time of the reservation")] | None
+    ) = None,
 ):
     """
     List all parking spots within a certain radius of a location and within a certain time range.
