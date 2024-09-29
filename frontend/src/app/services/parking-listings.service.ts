@@ -12,7 +12,7 @@ export class ParkingListingsService {
 
   constructor(private apiService: ApiService) {}
 
-  fetchParkingListings(lat: string, lon: string, radius: string, startTime: string, endTime: string): void {
+  fetchParkingListings(lat: number, lon: number, radius: string, startTime: string, endTime: string): void {
     this.apiService._getParkingSpots(lat, lon, radius, startTime, endTime).subscribe({
       next: (data: ParkingSpot[]) => {
         this.parkingListingsSubject.next(data);

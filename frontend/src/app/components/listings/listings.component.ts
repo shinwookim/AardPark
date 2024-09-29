@@ -1,128 +1,144 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MapViewComponent } from '../map-view/map-view.component';
-import { ApiService } from '../../services/api.service';
 import { ParkingSpot } from '../../data-classes/ParkingSpot';
 import { ParkingListingsService } from '../../services/parking-listings.service';
-import { GoogleMapsModule } from '@angular/google-maps';
+import { GoogleMapsModule, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { loadGoogleMapsScript } from '../../../main';
+import { ApiService } from '../../services/api.service';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-listings',
   standalone: true,
-  imports: [CommonModule, MapViewComponent, GoogleMapsModule],
+  imports: [CommonModule, FormsModule, MapViewComponent, GoogleMapsModule],
   templateUrl: './listings.component.html',
-  styleUrl: './listings.component.css'
+  styleUrls: ['./listings.component.css']
 })
-
 export class ListingsComponent implements OnInit {
-	options: google.maps.MapOptions = {
+  options: google.maps.MapOptions = {
     mapId: "DEMO_MAP_ID",
     center: { lat: -31, lng: 147 },
     zoom: 4,
-		streetViewControl: false
+    streetViewControl: false
   };
 
-	isGoogleMapsLoaded: boolean = false;
+  location: string = '';
+  radius: string = '';
+  startDate: string = '';
+  endDate: string = '';
+
+	searchedLat: number = 0;
+	searchedLon: number = 0;
+
+  isGoogleMapsLoaded: boolean = false;
   isListView: boolean = true;
-	parkingListings!: ParkingSpot[];
-	sampleParkingSpots: ParkingSpot[] = [
-		new ParkingSpot(
-			"001", 
-			"2024/10/01 08:00", 
-			"2024/10/01 18:00", 
-			"15", 
-			"Downtown Garage", 
-			"Secure indoor parking in the heart of downtown.", 
-			{
-				type: "Point", 
-				coordinates: [40.712776, -74.005974] // New York City coordinates
-			}
-		),
-		new ParkingSpot(
-			"002", 
-			"2024/10/01 09:00", 
-			"2024/10/01 17:00", 
-			"20", 
-			"Central Park Lot", 
-			"Spacious outdoor parking near Central Park.", 
-			{
-				type: "Point", 
-				coordinates: [40.785091, -73.968285] // Central Park, NYC coordinates
-			}
-		),
-		new ParkingSpot(
-			"003", 
-			"2024/10/01 07:00", 
-			"2024/10/01 19:00", 
-			"10", 
-			"Riverside Parking", 
-			"Affordable parking with easy access to the riverside.", 
-			{
-				type: "Point", 
-				coordinates: [40.803682, -73.967256] // Riverside Park, NYC coordinates
-			}
-		),
-		new ParkingSpot(
-			"004", 
-			"2024/10/02 08:00", 
-			"2024/10/02 20:00", 
-			"18", 
-			"Midtown Garage", 
-			"Secure underground parking in Midtown Manhattan.", 
-			{
-				type: "Point", 
-				coordinates: [40.754932, -73.984016] // Times Square, NYC coordinates
-			}
-		),
-		new ParkingSpot(
-			"005", 
-			"2024/10/02 10:00", 
-			"2024/10/02 22:00", 
-			"25", 
-			"Broadway Lot", 
-			"Convenient parking next to Broadway theaters.", 
-			{
-				type: "Point", 
-				coordinates: [40.759011, -73.984472] // Broadway, NYC coordinates
-			}
-		)
-	];	
+  parkingListings: ParkingSpot[] = [];
+
+  markers: any[] = [];
+  selectedParkingSpot!: ParkingSpot;
+  @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
 
   constructor(
     private parkingListingsService: ParkingListingsService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private apiService: ApiService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     loadGoogleMapsScript()
       .then(() => {
         this.isGoogleMapsLoaded = true;
-        this.initializeListings();
+        this.parkingListingsService.getParkingListings().subscribe({
+          next: (listings) => {
+            this.parkingListings = listings;
+            this.cdRef.detectChanges();
+          },
+        });
       })
       .catch((error) => {
         console.error('Google Maps API failed to load', error);
       });
-  }
 
-  initializeListings(): void {
-    this.parkingListingsService.fetchParkingListings(
-      '0',
-      '0',
-      '100000000',
-      '2000/01/01 01:01',
-      '3000/01/01 01:01'
-    );
-
-    this.parkingListingsService.getParkingListings().subscribe({
-      next: (listings) => {
-        this.parkingListings = this.sampleParkingSpots;
-        this.cdRef.detectChanges();
-      },
+    this.route.queryParams.subscribe(params => {
+      this.location = params['search'] || '';
+      this.radius = "10000";
+      this.queryParkingSpots();
     });
   }
 
   toggleView(): void {
     this.isListView = !this.isListView;
   }
+
+  queryParkingSpots(): void {
+    this.apiService._getLatLonFromAddress(this.location).subscribe({
+      next: (data) => {
+        this.options = {
+          ...this.options,
+          center: { lat: data.lat, lng: data.lng },
+          zoom: 12
+        };
+				this.searchedLat = data.lat;
+				this.searchedLon = data.lng;
+        this.apiService._getParkingSpots(this.searchedLat, this.searchedLon, this.radius, this.startDate, this.endDate).subscribe({
+          next: (data) => {
+            this.parkingListings = data;
+            this.generateMarkers();
+          }
+        });
+      }
+    });
+  }
+
+  generateMarkers(): void {
+    this.markers = this.parkingListings.map(spot => ({
+      position: {
+        lat: spot.location.coordinates[0],
+        lng: spot.location.coordinates[1]
+      },
+      title: spot.name,
+      options: {
+        animation: google.maps.Animation.DROP
+      },
+      spot: spot
+    }));
+  }
+
+	openInfoWindow(marker: MapMarker, spot: ParkingSpot): void {
+		this.selectedParkingSpot = spot;
+		this.infoWindow.open(marker);
+	}	
+
+	calculateDistanceInMiles(lat1: number, lon1: number, lat2: number, lon2: number): number {
+		const toRadians = (degrees: number): number => degrees * (Math.PI / 180);
+	
+		const earthRadiusMiles = 3958.8; // Earth's radius in miles
+	
+		const dLat = toRadians(lat2 - lat1);
+		const dLon = toRadians(lon2 - lon1);
+	
+		const a =
+			Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+			Math.cos(toRadians(lat1)) *
+				Math.cos(toRadians(lat2)) *
+				Math.sin(dLon / 2) *
+				Math.sin(dLon / 2);
+
+		return Math.round(earthRadiusMiles * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 10) / 10;
+	}
+
+	formatDate(dateString: string): string {
+		if (!dateString) return 'N/A';
+		const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+		return new Date(dateString).toLocaleDateString(undefined, options);
+	}	
+
+	formatTime(dateString: string): string {
+		if (!dateString) return 'N/A';
+		const options: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric' };
+		return new Date(dateString).toLocaleTimeString(undefined, options);
+	}	
 }

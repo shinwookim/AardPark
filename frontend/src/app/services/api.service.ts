@@ -15,9 +15,12 @@ export class ApiService {
 
   constructor(private http: HttpClient, private auth: AuthService) { }
 
-	_getParkingSpots(lat: string, lon: string, radius: string, startTime: string, endTime: string): Observable<ParkingSpot[]> {
-    return this.http.get<ParkingSpot[]>(encodeURI(`${this.apiUrl}/parking-spot/?latitude=${lat}&longitude=${lon}&radius_in_miles=${radius}&start_time=${startTime}&end_time=${endTime}`));
-  }
+	_getParkingSpots(lat: number, lon: number, radius: string, startTime?: string, endTime?: string): Observable<ParkingSpot[]> {
+		let queryParams = `latitude=${lat}&longitude=${lon}&radius_in_miles=${radius}`;
+		if (startTime) queryParams += `&start_time=${encodeURIComponent(startTime)}`;
+		if (endTime) queryParams += `&end_time=${encodeURIComponent(endTime)}`;
+		return this.http.get<ParkingSpot[]>(`${this.apiUrl}/parking-spot/?${queryParams}`);
+	}	
 
 	_getLatLonFromAddress(address: string): Observable<GeocodeLocation> {
 		const formattedAddress = address.replaceAll(" ", "+");
