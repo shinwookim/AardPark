@@ -40,8 +40,8 @@ def get_parking_spot(
             }
         },
         "start_time": {"$gte": start_time} if start_time else {"$exists": True},
-        "end_time": {"$lte": end_time} if end_time else {"$exists": True}, 
-        "taken": False
+        "end_time": {"$lte": end_time} if end_time else {"$exists": True},
+        "taken": False,
     }
     query_result = list(ParkingSpot.find(query, {{"_id": 0}, {"taken": 0}}))
     return list(query_result)
@@ -59,17 +59,17 @@ def new_parking_spot(
         str, Query(description="The start time of the availability.")
     ],
     end_time: Annotated[str, Query(description="The end time of the availability.")],
-    price: Annotated[
-        float, Query(description="The hourly price of the parking spot")
-        ],
+    price: Annotated[float, Query(description="The hourly price of the parking spot")],
 ):
     """
     Register a new parking spot.
     """
     temp_start = datetime.strptime(start_time, "%Y/%m/%d %H:%M")
-    temp_start_plus_one = datetime.strptime(start_time, "%Y/%m/%d %H:%M") + timedelta(hours=1)
+    temp_start_plus_one = datetime.strptime(start_time, "%Y/%m/%d %H:%M") + timedelta(
+        hours=1
+    )
     temp_end = datetime.strptime(end_time, "%Y/%m/%d %H:%M")
-    
+
     list_to_add = []
 
     while temp_start != temp_end:
@@ -82,7 +82,7 @@ def new_parking_spot(
                 "price": price,
                 "start_time": temp_start.strftime("%Y/%m/%d %H:%M"),
                 "end_time": temp_start_plus_one.strftime("%Y/%m/%d %H:%M"),
-                "taken": False
+                "taken": False,
             }
         )
         temp_start = temp_start_plus_one
@@ -91,10 +91,12 @@ def new_parking_spot(
     document: InsertManyResult = ParkingSpot.insertMany(list_to_add)
     return {"id": str(document.inserted_id), "acknowledged": document.acknowledged}
 
+
 @router.put("/parking_spot_availability")
-def update_parking_spot_availabit(
+def update_parking_spot_availability(
     parking_spot: Annotated[
-        str, Query(description="The ID of the parking spot to remove availability from.")
+        str,
+        Query(description="The ID of the parking spot to remove availability from."),
     ],
     start_time: Annotated[
         str, Query(description="The start time of the availability.")
@@ -109,7 +111,8 @@ def update_parking_spot_availabit(
         "end_time": {"$lte": end_time},
     }
 
-    document: UpdateResult = ParkingSpot.updateMany(query, {"$set": {"taken": True}}, {"multi": True})
+    document: UpdateResult = ParkingSpot.updateMany(
+        query, {"$set": {"taken": True}}, {"multi": True}
+    )
 
     return {"id": str(document.inserted_id), "acknowledged": document.acknowledged}
-
