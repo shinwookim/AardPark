@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from pymongo.results import InsertManyResult, UpdateResult
 from bson import ObjectId
 from aardpark.database import ParkingSpot
+from uuid import uuid4
 
 # https://www.space.com/17638-how-big-is-earth.html
 EARTH_RADIUS_IN_MILES = 3958.8
@@ -71,11 +72,12 @@ def new_parking_spot(
     temp_end = datetime.strptime(end_time, "%Y/%m/%d %H:%M")
 
     list_to_add = []
-
+    spot_id = str(uuid4())
     while temp_start != temp_end:
         # Add item
         list_to_add.append(
             {
+                "parking_spot": spot_id,
                 "name": name,
                 "location": {"type": "Point", "coordinates": [latitude, longitude]},
                 "owner": owner_username,
@@ -88,8 +90,8 @@ def new_parking_spot(
         temp_start = temp_start_plus_one
         temp_start_plus_one = temp_start_plus_one + timedelta(hours=1)
 
-    document: InsertManyResult = ParkingSpot.insertMany(list_to_add)
-    return {"id": str(document.inserted_id), "acknowledged": document.acknowledged}
+    document: InsertManyResult = ParkingSpot.insert_many(list_to_add)
+    return {"id": str(document.inserted_ids), "acknowledged": document.acknowledged}
 
 
 @router.put("/parking_spot_availability")
@@ -106,13 +108,13 @@ def update_parking_spot_availability(
     """Sets the parking spot to taken"""
 
     query = {
-        "parking_spot": {"$eq": ObjectId(parking_spot)},
+        "parking_spot": {"$eq": parking_spot},
         "start_time": {"$gte": start_time},
         "end_time": {"$lte": end_time},
     }
 
-    document: UpdateResult = ParkingSpot.updateMany(
-        query, {"$set": {"taken": True}}, {"multi": True}
+    document: UpdateResult = ParkingSpot.update_many(
+        query, {"$set": {"taken": True}}, False
     )
 
-    return {"id": str(document.inserted_id), "acknowledged": document.acknowledged}
+    return {"id": str(document.upserted_id), "acknowledged": document.acknowledged}
