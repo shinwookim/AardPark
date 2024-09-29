@@ -1,11 +1,33 @@
-.listing-item {
-    padding: 15px;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    border-radius: 15px;
-    border: 1px solid black;
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-.listing-item * {
-    margin-top: -1px;
+app-listings {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.listings-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.topbar {
+  flex-shrink: 0;
+}
+
+.listings, app-map-view {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.listing-item {
+  padding: 15px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  border: 1px solid black;
 }

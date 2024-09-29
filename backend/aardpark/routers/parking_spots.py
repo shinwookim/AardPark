@@ -1,9 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Query
 from datetime import datetime
-
-from bson import json_util
-import json
+from pymongo import GEO2D
 from pymongo.results import InsertOneResult
 from aardpark.database import Availability, ParkingSpot
 
@@ -18,25 +16,27 @@ def get_parking_spot(
     latitude: Annotated[float, Query(description="The latitude of the parking spot")],
     longitude: Annotated[float, Query(description="The longitude of the parking spot")],
     radius_in_miles: Annotated[float, Query(description="The radius in miles")],
-    start_time: Annotated[datetime, Query(description="The start time of reservation")],
-    end_time: Annotated[datetime, Query(description="The end time of the reservation")],
+    start_time: Annotated[str, Query(description="The start time of reservation")],
+    end_time: Annotated[str, Query(description="The end time of the reservation")],
 ):
     """
     List all parking spots within a certain radius of a location and within a certain time range.
     """
     # Coordinates of the center point (longitude, latitude)
-    center_point = [latitude, longitude]
-
+    center_point = [longitude, latitude]
     query = {
         "location": {
-            "$near": {
-                "$geometry": {"type": "Point", "coordinates": center_point},
-                "$maxDistance": radius_in_miles / EARTH_RADIUS_IN_MILES,
+            "$geoWithin": {
+                "$centerSphere": [
+                    center_point,
+                    (radius_in_miles / EARTH_RADIUS_IN_MILES),
+                ]
             }
         },
-        # TODO: Add a query to filter parking spots that are available between start_time and end_time
+        "start_time": {"$gte": start_time},
+        "end_time": {"$lte": end_time},
     }
-    query_result = Availability.find(query, {"_id":0})
+    query_result = Availability.find(query, {"_id": 0})
     return list(query_result)
 
 
@@ -53,6 +53,7 @@ def new_parking_spot(
     """
     Register a new parking spot.
     """
+
     document: InsertOneResult = ParkingSpot.insert_one(
         {
             "name": name,
