@@ -4,16 +4,12 @@ export class ParkingSpot {
 	public owner_name: string,
     public start_time: string,
     public end_time: string,
-		public price: string,
-		public title: string,
+    public price: number,
+    public name: string,
 		public description: string,
-		public taken: boolean,
-    public location: { 
-			type: string; 
-			coordinates: [
-				number, 
-				number
-			] 
-		}
+    public location: {
+      type: string;
+      coordinates: [number, number];
+    }
   ) {}
 }

@@ -2,29 +2,81 @@
   <div class="results-container">
     <div *ngIf="isListView">
       <div class="listings">
-        <div *ngFor="let listing of parkingListings" class="listing-item">
-          <h1>{{ listing.title }}</h1>
-          <p>{{ listing.description }}</p>
-          <h2>${{ listing.price }} / hr</h2>
-          <button type="button">Book now</button>
+        <div *ngFor="let listing of parkingListings" class="listing-row">
+          <div class="listing-item">
+            <h1>{{ listing.name }}</h1>
+            <p>{{ listing.description }}</p>
+            <h2>${{ listing.price }} / hr</h2>
+            <button type="button">Book now</button>
+          </div>
+					<div class="listing-extra">
+						<div class="icon-row">
+							<span class="material-symbols-outlined">date_range</span>
+							<p>{{ formatDate(listing.start_time) }}</p>
+						</div>
+						<div class="icon-row">
+							<span class="material-symbols-outlined">schedule</span>
+							<p>{{ formatTime(listing.start_time) }} - {{ formatTime(listing.end_time) }}</p>
+						</div>
+						<p><strong>Distance:</strong> {{ calculateDistanceInMiles(searchedLat, searchedLon, listing.location.coordinates[0], listing.location.coordinates[1]) }} miles</p>
+					</div>					
         </div>
       </div>
+			
     </div>
-		<div class="map-container">
-			<google-map *ngIf="isGoogleMapsLoaded && !isListView" height="600px" width="800px" [options]="options"> </google-map>
-		</div>
+    <div class="map-container">
+			<google-map
+				*ngIf="isGoogleMapsLoaded && !isListView"
+				height="600px"
+				width="800px"
+				[options]="options"
+			>
+				<map-marker
+					*ngFor="let marker of markers"
+					#mapMarker="mapMarker"
+					[position]="marker.position"
+					[options]="marker.options"
+					(mapClick)="openInfoWindow(mapMarker, marker.spot)"
+				></map-marker>
+
+				<map-info-window #infoWindow>
+					<div class="info-window">
+						<div class="row">
+							<div class="basic-info">
+								<h1>{{ selectedParkingSpot != null ? selectedParkingSpot.name : "Unknown" }}</h1>
+								<p>{{ selectedParkingSpot != null ? selectedParkingSpot.description : "Unknown" }}</p>
+								<h2>${{ selectedParkingSpot != null ? selectedParkingSpot.price + " / hr" : "Unknown" }}</h2>
+							</div>
+							<div class="listing-extra">
+								<div class="icon-row">
+									<span class="material-symbols-outlined">date_range</span>
+									<p>{{ selectedParkingSpot != null ? formatDate(selectedParkingSpot.start_time) : "N/A" }}</p>
+								</div>
+								<div class="icon-row">
+									<span class="material-symbols-outlined">schedule</span>
+									<p>{{ selectedParkingSpot != null ? formatTime(selectedParkingSpot.start_time) : "N/A" }} - {{ selectedParkingSpot != null ? formatTime(selectedParkingSpot.end_time) : "N/A" }}</p>
+								</div>
+								<p><strong>Distance:</strong> {{ selectedParkingSpot != null ? calculateDistanceInMiles(searchedLat, searchedLon, selectedParkingSpot.location.coordinates[0], selectedParkingSpot.location.coordinates[1]) : "0" }} miles</p>
+							</div>
+						</div>
+						<button type="button">Book now</button>
+					</div>
+				</map-info-window>
+			</google-map>
+
+	  </div>
   </div>
   <div class="sidebar-container">
     <h2>Search Listings</h2>
 
     <div class="input-wrapper">
       <span class="material-symbols-outlined">location_on</span>
-      <input type="text" placeholder="Location" />
+      <input type="text" placeholder="Location" [(ngModel)]="location" />
     </div>
 
     <div class="input-wrapper">
       <span class="material-symbols-outlined">distance</span>
-      <input type="text" placeholder="Radius (Miles)" />
+      <input type="text" placeholder="Radius (Miles)" [(ngModel)]="radius" />
     </div>
 
     <div class="input-wrapper">
@@ -40,7 +92,7 @@
     </div>
 
     <div class="button-container">
-      <button type="submit">Search</button>
+      <button type="submit" (click)="queryParkingSpots()">Search</button>
     </div>
 
     <div class="toggle-view-wrapper">

@@ -7,31 +7,64 @@
     overflow-y: auto;
     padding-right: 300px;
 
-    .listings {
-      padding: 20px; 
+		.listings {
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 20px;
 
-      .listing-item {
-        border: 1px solid black;
-        padding: 20px;
-        border-radius: 16px;
-      }
+      .listing-row {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+				border: 1px solid black;
+				padding: 20px;
+				border-radius: 16px;
 
-			button {
-        width: 30%;
-        height: 40px;
-        border-radius: 10px;
-        font-size: 20px;
-        border: transparent;
-        background-color: #2e9ffc;
-        color: white;
-        cursor: pointer;
-        transition: background-color 0.3s;
+        .listing-item {
+          flex: 1;
 
-        &:hover {
-          background-color: #0056b3;
+          h1, h2 {
+            margin: 0 0 20px 0;
+          }
+
+          button {
+            width: 70%;
+            height: 40px;
+            border-radius: 10px;
+            font-size: 20px;
+            border: transparent;
+            background-color: #2e9ffc;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover {
+              background-color: #0056b3;
+            }
+          }
+        }
+
+        .listing-extra {
+          flex: 1;
+          padding: 20px;
+          border-radius: 16px;
+					gap: 10px;
+					height: 100%;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+
+					.icon-row {
+						display: flex;
+						flex-direction: row;
+						gap: 5px;
+					}
+
+          p {
+						font-size: 18px;
+            margin: 0 0 10px 0;
+          }
         }
       }
     }
@@ -40,6 +73,61 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
+
+			.info-window {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+
+				button {
+					width: 80%;
+					height: 30px;
+					border-radius: 10px;
+					font-size: 20px;
+					border: transparent;
+					background-color: #2e9ffc;
+					color: white;
+					cursor: pointer;
+					transition: background-color 0.3s;
+	
+					&:hover {
+						background-color: #0056b3;
+					}
+				}
+
+				.row {
+					display: flex;
+					flex-direction: row;
+					gap: 20px;
+
+					.basic-info {
+						display: flex;
+						flex-direction: column;
+					}
+
+					.listing-extra {
+						flex: 1;
+						padding: 20px;
+						border-radius: 16px;
+						gap: 10px;
+						height: 100%;
+						display: flex;
+						flex-direction: column;
+						justify-content: center;
+	
+						.icon-row {
+							display: flex;
+							flex-direction: row;
+							gap: 5px;
+						}
+	
+						p {
+							font-size: 18px;
+							margin: 0 0 10px 0;
+						}
+					}
+				}
+			}
 		}
   }
 
