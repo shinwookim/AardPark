@@ -1,11 +1,41 @@
-.listing-item {
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+.listings-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .list-view {
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+  
+  .map-view {
+    flex-grow: 1;
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .listing-item {
     padding: 15px;
     border-radius: 15px;
     margin-bottom: 20px;
-    border-radius: 15px;
     border: 1px solid black;
-}
-
-.listing-item * {
+  }
+  
+  .listing-item * {
     margin-top: -1px;
-}
+  }

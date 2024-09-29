@@ -37,7 +37,7 @@ body, html {
     font-size: 18px;
     border: none;
     border-radius: 50px;    
-    box-shadow: 0 0 0 2px #4a90e2;
+    box-shadow: 0 0 0 2px #2e9ffc;
     width: 100%;
     box-sizing: border-box;
 }
@@ -62,7 +62,7 @@ body, html {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background-color: #27b0e1;
+    background-color: #2e9ffc;
     color: white;
     font-size: 24px;
     display: flex;
@@ -72,7 +72,7 @@ body, html {
 }
 
 .custom-input-group .btn-submit:hover {
-    background-color: #2b98c0;
+    background-color: #0056b3;
 }
 
 .custom-input-group .material-symbols-outlined {
