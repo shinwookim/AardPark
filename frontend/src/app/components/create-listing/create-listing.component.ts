@@ -3,6 +3,7 @@ import { ApiService } from '../../services/api.service';
 import { GeocodeLocation } from '../../data-classes/GeocodeLocation';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '@auth0/auth0-angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-listing',
@@ -19,12 +20,13 @@ export class CreateListingComponent {
 	start: string = "";
 	end: string = "";
 
-	constructor(private apiService: ApiService, private auth: AuthService) {}
+	constructor(private apiService: ApiService, private auth: AuthService, private router: Router) {}
 	
 	createListing() {
 		this.apiService._getLatLonFromAddress(this.location).subscribe({
 			next: (data: GeocodeLocation) => {
 				this.apiService._newParkingSpot(this.title, this.description, data.lat, data.lng, this.formatDateTime(this.start), this.formatDateTime(this.end), this.price);
+				this.router.navigate(['/']);
 			}
 		})
 	}
