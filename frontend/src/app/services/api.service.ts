@@ -20,6 +20,10 @@ export class ApiService {
     	return this.http.get<ParkingSpot[]>(encodeURI(`${this.apiUrl}/parking-spot/?latitude=${lat}&longitude=${lon}&radius_in_miles=${radius}&start_time=${startTime}&end_time=${endTime}`));
   	}
 
+	_getListing(spotId: string): Observable<ParkingSpot[]> {
+		return this.http.get<ParkingSpot[]>(encodeURI(`${this.apiUrl}/booking/${spotId}`));
+	}
+
 	_newParkingSpot(name: string, desc: string, lat: number, long: number, username: string, start: string, end: string) {
 		let data = {"name": name, "description": desc, "latitude": lat, "longitude": long, "owner_username": username, "start_time": start, "end_time": end};
 		this.http.post(encodeURI(`${this.apiUrl}/parking-spot/`), data);
@@ -45,7 +49,7 @@ export class ApiService {
 			})
 		);
 	}
-	_getBooking(spotId: string): Observable<Booking[]> {
+	_getBooking(): Observable<Booking[]> {
 		return this.http.get<Booking[]>(encodeURI(`${this.apiUrl}/booking/`));
 	}
 
