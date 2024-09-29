@@ -33,6 +33,18 @@ export class MyListingsComponent {
     }
   ];
 
+  formatDate(dateString: string): string {
+		if (!dateString) return 'N/A';
+		const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+		return new Date(dateString).toLocaleDateString(undefined, options);
+	}	
+
+	formatTime(dateString: string): string {
+		if (!dateString) return 'N/A';
+		const options: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric' };
+		return new Date(dateString).toLocaleTimeString(undefined, options);
+	}	
+
   constructor() {};
 
 

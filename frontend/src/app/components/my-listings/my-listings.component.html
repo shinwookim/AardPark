@@ -8,8 +8,9 @@
         <div *ngFor="let listing of purchasedListings" class="listing-item">
             <div class="top-row">
                 <h2>{{ listing.name }}</h2>
-                <p>{{ listing.start_time }} - {{ listing.end_time }}</p>
+                <p>{{ formatTime(listing.start_time) }} - {{ formatTime(listing.end_time) }}</p>
             </div>
+            <p>{{ formatDate(listing.start_time) }}</p>
             <p>{{ listing.description }}</p>
             <h3>${{ listing.price }}/hr</h3>
             <p>Owner: {{ listing.owner }}</p>
@@ -23,8 +24,9 @@
         <div *ngFor="let listing of soldListings" class="listing-item">
             <div class="top-row">
                 <h2>{{ listing.name }}</h2>
-                <p>{{ listing.start_time }} - {{ listing.end_time }}</p>
+                <p>{{ formatTime(listing.start_time) }} - {{ formatTime(listing.end_time) }}</p>
             </div>
+            <p>{{ formatDate(listing.start_time) }}</p>
             <p>{{ listing.description }}</p>
             <h3>${{ listing.price }}/hr</h3>
             <p>Owner: {{ listing.owner }}</p>
