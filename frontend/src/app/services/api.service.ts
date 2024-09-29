@@ -26,10 +26,11 @@ export class ApiService {
 	}
 
 	_newBooking(spotId: string, start: string, end: string, purchaser: string, seller: string) {
-		this.http.post(encodeURI(`${this.apiUrl}/booking/?purchaser=${purchaser}&seller=${seller}parking_spot=${spotId}&start_time=${start}&end_time=${end}`));
+		let data_post = {"purchaser": purchaser, "seller": seller, "parking_spot": spotId, "start_time":start, "end_time":end}
+		this.http.post(encodeURI(`${this.apiUrl}/booking/?`), data_post);
 
-		let data = { "parking_spot": spotId, "start_time": start, "end_time": end};
-		this.http.put(encodeURI(`${this.apiUrl}/parking_spot_availability/`), data);
+		let data_put = { "parking_spot": spotId, "start_time": start, "end_time": end};
+		this.http.put(encodeURI(`${this.apiUrl}/parking_spot_availability/`), data_put);
 	}
 
 	_getLatLonFromAddress(address: string): Observable<GeocodeLocation> {
