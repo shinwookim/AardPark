@@ -4,6 +4,7 @@ import { AuthService } from '@auth0/auth0-angular';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 import { ParkingSpot } from '../data-classes/ParkingSpot';
+import { Booking } from '../data-classes/Booking';
 import { GeocodeLocation } from '../data-classes/GeocodeLocation';
 
 @Injectable({
@@ -15,12 +16,22 @@ export class ApiService {
 
   constructor(private http: HttpClient, private auth: AuthService) { }
 
-	_getParkingSpots(lat: number, lon: number, radius: string, startTime?: string, endTime?: string): Observable<ParkingSpot[]> {
-		let queryParams = `latitude=${lat}&longitude=${lon}&radius_in_miles=${radius}`;
-		if (startTime) queryParams += `&start_time=${encodeURIComponent(startTime)}`;
-		if (endTime) queryParams += `&end_time=${encodeURIComponent(endTime)}`;
-		return this.http.get<ParkingSpot[]>(`${this.apiUrl}/parking-spot/?${queryParams}`);
-	}	
+	_getParkingSpots(lat: string, lon: string, radius: string, startTime: string, endTime: string): Observable<ParkingSpot[]> {
+    	return this.http.get<ParkingSpot[]>(encodeURI(`${this.apiUrl}/parking-spot/?latitude=${lat}&longitude=${lon}&radius_in_miles=${radius}&start_time=${startTime}&end_time=${endTime}`));
+  	}
+
+	_newParkingSpot(name: string, desc: string, lat: number, long: number, username: string, start: string, end: string) {
+		let data = {"name": name, "description": desc, "latitude": lat, "longitude": long, "owner_username": username, "start_time": start, "end_time": end};
+		this.http.post(encodeURI(`${this.apiUrl}/parking-spot/`), data);
+	}
+
+	_newBooking(spotId: string, start: string, end: string, purchaser: string, seller: string) {
+		let data_post = {"purchaser": purchaser, "seller": seller, "parking_spot": spotId, "start_time":start, "end_time":end}
+		this.http.post(encodeURI(`${this.apiUrl}/booking/?`), data_post);
+
+		let data_put = { "parking_spot": spotId, "start_time": start, "end_time": end};
+		this.http.put(encodeURI(`${this.apiUrl}/parking_spot_availability/`), data_put);
+	}
 
 	_getLatLonFromAddress(address: string): Observable<GeocodeLocation> {
 		const formattedAddress = address.replaceAll(" ", "+");
@@ -33,6 +44,13 @@ export class ApiService {
 				return new GeocodeLocation(lat, lng);
 			})
 		);
+	}
+	_getBooking(spotId: string): Observable<Booking[]> {
+		return this.http.get<Booking[]>(encodeURI(`${this.apiUrl}/booking/`));
+	}
+
+	_getIndividualBooking(userId: string): Observable<Booking> {
+		return this.http.get<Booking>(encodeURI(`${this.apiUrl}/booking/${userId}`));
 	}
 	
 }

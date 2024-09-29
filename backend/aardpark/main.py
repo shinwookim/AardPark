@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import availability, bookings, messages, parking_spots
+from .routers import bookings, messages, parking_spots
 
 app = FastAPI()
 
@@ -20,7 +20,6 @@ app.add_middleware(
 )
 
 
-app.include_router(availability.router)
 app.include_router(bookings.router)
 app.include_router(messages.router)
 app.include_router(parking_spots.router)

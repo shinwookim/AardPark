@@ -4,7 +4,7 @@
       <h4>Title</h4>
       <div class="input-wrapper">
         <span class="material-symbols-outlined">title</span>
-        <input placeholder="Title" required>
+        <input placeholder="Title" [(ngModel)]="title" required>
       </div>
     </div>
 
@@ -12,7 +12,7 @@
       <h4>Location</h4>
       <div class="input-wrapper">
         <span class="material-symbols-outlined">location_on</span>
-        <input placeholder="Location" required>
+        <input placeholder="Location" [(ngModel)]="location"  required>
       </div>
     </div>
 
@@ -20,7 +20,7 @@
       <h4>Description</h4>
       <div class="input-wrapper">
         <span class="material-symbols-outlined">description</span>
-        <input placeholder="Description" required>
+        <input placeholder="Description"[(ngModel)]="description" required>
       </div>
     </div>
 
@@ -28,7 +28,25 @@
       <h4>Price</h4>
       <div class="input-wrapper">
         <span class="material-symbols-outlined">payments</span>
-        <input placeholder="Price (Hourly)" required>
+        <input placeholder="Price (Hourly)" [(ngModel)]="price"  required>
+      </div>
+    </div>
+
+    <div class="input-box">
+      <h4>Start Date/Time</h4>
+      <div class="input-wrapper">
+        <span class="material-symbols-outlined">calendar_today</span>
+        <label for="startDate">Start Date</label>
+        <input id="startDate" type="datetime-local" [(ngModel)]="start"  required/>
+      </div>
+    </div>
+
+    <div class="input-box">
+      <h4>Start Date/Time</h4>
+      <div class="input-wrapper">
+        <span class="material-symbols-outlined">calendar_today</span>
+        <label for="endDate">End Date</label>
+        <input id="endDate" type="datetime-local" [(ngModel)]="end"  required/>
       </div>
     </div>
 
