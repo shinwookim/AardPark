@@ -16,9 +16,7 @@ router = APIRouter()
 def get_parking_spot(
     latitude: Annotated[float, Query(description="The latitude of the parking spot")],
     longitude: Annotated[float, Query(description="The longitude of the parking spot")],
-    radius_in_miles: (
-        Annotated[float, Query(description="The radius in miles")] | None
-    ) = None,
+    radius_in_miles: Annotated[float, Query(description="The radius in miles")],
     start_time: (
         Annotated[str, Query(description="The start time of reservation")] | None
     ) = None,
@@ -44,7 +42,7 @@ def get_parking_spot(
         "end_time": {"$lte": end_time} if end_time else {"$exists": True},
         "taken": False,
     }
-    query_result = list(ParkingSpot.find(query, {{"_id": 0}, {"taken": 0}}))
+    query_result = list(ParkingSpot.find(query, {"_id": 0, "taken": 0}))
     return list(query_result)
 
 
