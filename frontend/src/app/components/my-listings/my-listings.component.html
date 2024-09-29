@@ -1,0 +1,27 @@
+<div class="page-container" style="max-width: 800px; margin: auto;">
+    <div class="results-container">
+      <h2>My Listings</h2>
+  
+      <h2>Purchased Spots</h2>
+      <div class="listings">
+        <p *ngIf="purchasedListings.length === 0">No spots purchased yet.</p>
+        <div *ngFor="let listing of purchasedListings" class="listing-item">
+            <h2>{{ listing.name }}</h2>
+            <p class="date">{{ listing.start_time }} - {{ listing.end_time }}</p>
+            <p>{{ listing.description }}</p>
+            <h3>${{ listing.price }}/hr</h3>
+            <p>Owner: {{ listing.owner }}</p>
+        </div>
+        <p *ngIf="purchasedListings.length === 0">No spots purchased yet.</p>
+      </div>
+  
+      <h2>Sold Spots</h2>
+      <div class="listings">
+        <p *ngIf="soldListings.length === 0">No spots sold yet.</p>
+        <div *ngFor="let listing of soldListings" class="listing-item">
+        </div>
+      </div>
+      
+    </div>
+
+  </div>
