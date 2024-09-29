@@ -74,7 +74,7 @@ def new_parking_spot(
 
     list_to_add = []
     spot_id = str(uuid4())
-    while temp_start != temp_end:
+    while temp_start <= temp_end:
         # Add item
         list_to_add.append(
             {
