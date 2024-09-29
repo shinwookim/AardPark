@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, Path
 from datetime import datetime, timedelta
 from pymongo.results import InsertManyResult, UpdateResult
 from bson import ObjectId
@@ -120,3 +120,15 @@ def update_parking_spot_availability(
     )
 
     return {"id": str(document.upserted_id), "acknowledged": document.acknowledged}
+
+
+@router.get("/parking-spot/{spot_id}")
+def get_parking_spot_by_id(
+    spot_id: Annotated[str, Path(description="The ID of the parking spot")]
+):
+    """
+    Get a parking spot by its ID.
+    """
+    query = {"parking_spot": spot_id}
+    query_result = ParkingSpot.find_one(query, {"_id": 0, "taken": 0})
+    return query_result
