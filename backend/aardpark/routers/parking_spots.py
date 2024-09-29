@@ -1,6 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Query
 from datetime import datetime
+from pymongo import GEO2D
 from pymongo.results import InsertOneResult
 from aardpark.database import Availability, ParkingSpot
 
@@ -22,23 +23,20 @@ def get_parking_spot(
     List all parking spots within a certain radius of a location and within a certain time range.
     """
     # Coordinates of the center point (longitude, latitude)
-    center_point = [latitude, longitude]
-
+    center_point = [longitude, latitude]
     query = {
         "location": {
-            "$near": {
-                "$geometry": {"type": "Point", "coordinates": center_point},
-                "$maxDistance": radius_in_miles / EARTH_RADIUS_IN_MILES,
+            "$geoWithin": {
+                "$centerSphere": [
+                    center_point,
+                    (radius_in_miles / EARTH_RADIUS_IN_MILES),
+                ]
             }
         },
-        "start_time" : { 
-            "$gte" : start_time 
-        }, 
-        "end_time" : { 
-            "$lte" : end_time 
-        }
+        "start_time": {"$gte": start_time},
+        "end_time": {"$lte": end_time},
     }
-    query_result = Availability.find(query, {"_id":0})
+    query_result = Availability.find(query, {"_id": 0})
     return list(query_result)
 
 
@@ -55,6 +53,7 @@ def new_parking_spot(
     """
     Register a new parking spot.
     """
+
     document: InsertOneResult = ParkingSpot.insert_one(
         {
             "name": name,
