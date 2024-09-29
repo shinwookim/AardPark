@@ -141,4 +141,8 @@ export class ListingsComponent implements OnInit {
 		const options: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric' };
 		return new Date(dateString).toLocaleTimeString(undefined, options);
 	}	
+
+	bookListing(listing: ParkingSpot) {
+		this.apiService._newBooking(listing.parking_spot, listing.start_time, listing.end_time, listing.owner);
+	}
 }

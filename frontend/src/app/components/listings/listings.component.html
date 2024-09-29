@@ -7,7 +7,7 @@
             <h1>{{ listing.name }}</h1>
             <p>{{ listing.description }}</p>
             <h2>${{ listing.price }} / hr</h2>
-            <button type="button">Book now</button>
+            <button type="button" (click)="bookListing(listing)">Book now</button>
           </div>
 					<div class="listing-extra">
 						<div class="icon-row">
@@ -59,7 +59,7 @@
 								<p><strong>Distance:</strong> {{ selectedParkingSpot != null ? calculateDistanceInMiles(searchedLat, searchedLon, selectedParkingSpot.location.coordinates[0], selectedParkingSpot.location.coordinates[1]) : "0" }} miles</p>
 							</div>
 						</div>
-						<button type="button">Book now</button>
+						<button type="button" (click)="bookListing(selectedParkingSpot)">Book now</button>
 					</div>
 				</map-info-window>
 			</google-map>
