@@ -9,13 +9,12 @@
   .inputs {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 30px;
 
     border-radius: 20px;
     padding: 20px;
     width: 60%;
     color: rgb(176, 173, 173);
-    width: 800px;
 
     input {
       border-radius: 10px;
@@ -29,7 +28,7 @@
       align-items: center;
       border: 1.5px solid gray; 
       border-radius: 10px;
-      padding: 10px;
+      padding: 12px;
       gap: 6px;
 
       .icon {
@@ -75,6 +74,8 @@
       background-color: #2e9ffc;
       color: white;
       padding: 3px;
+      font-family: Helvetica, Arial, sans-serif;
+      font-weight: 550;
     
       &:hover {
         background-color: #0056b3;
@@ -86,6 +87,6 @@
 h4 {
   margin: 0 0 3px 0;  
   font-size: 18px;
-  color: rgb(50, 50, 50);
+  color: #1f2a36;
 }
 
