@@ -15,8 +15,8 @@ def get_parking_spot(
     latitude: Annotated[float, Query(description="The latitude of the parking spot")],
     longitude: Annotated[float, Query(description="The longitude of the parking spot")],
     radius_in_miles: Annotated[float, Query(description="The radius in miles")],
-    start_time: Annotated[datetime, Query(description="The start time of reservation")],
-    end_time: Annotated[datetime, Query(description="The end time of the reservation")],
+    start_time: Annotated[str, Query(description="The start time of reservation")],
+    end_time: Annotated[str, Query(description="The end time of the reservation")],
 ):
     """
     List all parking spots within a certain radius of a location and within a certain time range.
