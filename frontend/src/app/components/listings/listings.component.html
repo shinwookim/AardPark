@@ -1,21 +1,59 @@
-<div class="listings-container">
-<div class="topbar">
-    <h2>Available spots near LOCATION GOES HERE </h2>
-    <button (click)="toggleView()" class="toggle-button">{{ isListView ? 'Map View' : 'List View'}}</button>
-</div>
-
+<div class="page-container">
+  <div class="results-container">
     <div *ngIf="isListView">
-        <div *ngFor="let listing of parkingListings" class="listings">
-            <div class="listing-item">
-                <h3>{{ listing.name }}</h3>
-                <h2>{{ listing.address}}</h2>
-                <h2>${{ listing.price }} / hr</h2>
-                <button type="button">Book now</button>
-            </div>
+      <div class="listings">
+        <div *ngFor="let listing of parkingListings" class="listing-item">
+          <h1>{{ listing.title }}</h1>
+          <p>{{ listing.description }}</p>
+          <h2>${{ listing.price }} / hr</h2>
+          <button type="button">Book now</button>
         </div>
+      </div>
+    </div>
+		<div class="map-container">
+			<google-map *ngIf="isGoogleMapsLoaded && !isListView" height="600px" width="800px" [options]="options"> </google-map>
+		</div>
+  </div>
+  <div class="sidebar-container">
+    <h2>Search Listings</h2>
+
+    <div class="input-wrapper">
+      <span class="material-symbols-outlined">location_on</span>
+      <input type="text" placeholder="Location" />
     </div>
 
-    <div *ngIf="!isListView">
-        <app-map-view [parkingListings]="parkingListings"></app-map-view>
+    <div class="input-wrapper">
+      <span class="material-symbols-outlined">distance</span>
+      <input type="text" placeholder="Radius (Miles)" />
     </div>
+
+    <div class="input-wrapper">
+      <span class="material-symbols-outlined">calendar_today</span>
+      <label for="startDate">Start Date</label>
+      <input id="startDate" type="date" />
+    </div>
+
+    <div class="input-wrapper">
+      <span class="material-symbols-outlined">calendar_today</span>
+      <label for="endDate">End Date</label>
+      <input id="endDate" type="date" />
+    </div>
+
+    <div class="button-container">
+      <button type="submit">Search</button>
+    </div>
+
+    <div class="toggle-view-wrapper">
+      <label class="radio-container">
+        List View
+        <input type="radio" name="view" value="list" checked (change)="isListView = true">
+        <span class="checkmark"></span>
+      </label>
+      <label class="radio-container">
+        Map View
+        <input type="radio" name="view" value="map" (change)="isListView = false">
+        <span class="checkmark"></span>
+      </label>
+    </div>
+  </div>
 </div>
