@@ -3,44 +3,44 @@
     <div *ngIf="isListView">
       <div class="listings">
         <div *ngFor="let listing of parkingListings" class="listing-item">
-          <h1>{{ listing.title }}</h1>
+          <h1>{{ listing.name }}</h1>
           <p>{{ listing.description }}</p>
           <h2>${{ listing.price }} / hr</h2>
           <button type="button">Book now</button>
         </div>
       </div>
     </div>
-		<div class="map-container">
-			<google-map *ngIf="isGoogleMapsLoaded && !isListView" height="600px" width="800px" [options]="options"> </google-map>
-		</div>
+    <div class="map-container">
+      <google-map *ngIf="isGoogleMapsLoaded && !isListView" height="600px" width="800px" [options]="options"></google-map>
+    </div>
   </div>
   <div class="sidebar-container">
     <h2>Search Listings</h2>
 
     <div class="input-wrapper">
       <span class="material-symbols-outlined">location_on</span>
-      <input type="text" placeholder="Location" />
+      <input type="text" placeholder="Location" [(ngModel)]="location" />
     </div>
 
     <div class="input-wrapper">
       <span class="material-symbols-outlined">distance</span>
-      <input type="text" placeholder="Radius (Miles)" />
+      <input type="text" placeholder="Radius (Miles)" [(ngModel)]="radius" />
     </div>
 
     <div class="input-wrapper">
       <span class="material-symbols-outlined">calendar_today</span>
       <label for="startDate">Start Date</label>
-      <input id="startDate" type="date" />
+      <input id="startDate" type="date" [(ngModel)]="startDate" />
     </div>
 
     <div class="input-wrapper">
       <span class="material-symbols-outlined">calendar_today</span>
       <label for="endDate">End Date</label>
-      <input id="endDate" type="date" />
+      <input id="endDate" type="date" [(ngModel)]="endDate" />
     </div>
 
     <div class="button-container">
-      <button type="submit">Search</button>
+      <button type="submit" (click)="queryParkingSpots()">Search</button>
     </div>
 
     <div class="toggle-view-wrapper">

@@ -32,12 +32,12 @@ export class MapViewComponent implements OnInit {
 					const marker = new google.maps.Marker({
 						position: { lat: listing.location.coordinates[0], lng: listing.location.coordinates[1] },
 						map: map,
-						title: listing.title
+						title: listing.name
 					});
 		
 					const infoWindow = new google.maps.InfoWindow({
 						content: `
-						<h3>${listing.title}</h3>
+						<h3>${listing.name}</h3>
 						<p>$${listing.price}/hr</p>
 						`
 					});
