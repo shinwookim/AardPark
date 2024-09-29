@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ApiServiceService } from '../../services/api-service.service';
+import { ApiService } from '../../services/api.service';
+import { GeocodeLocation } from '../../data-classes/GeocodeLocation';
 
 @Component({
   selector: 'app-create-listing',
@@ -9,11 +10,11 @@ import { ApiServiceService } from '../../services/api-service.service';
   styleUrl: './create-listing.component.css'
 })
 export class CreateListingComponent {
-	constructor(private apiService: ApiServiceService) {}
+	constructor(private apiService: ApiService) {}
 	
 	createListing() {
 		this.apiService._getLatLonFromAddress("325 North Craig Street").subscribe({
-			next: (data) => {
+			next: (data: GeocodeLocation) => {
 				console.log(data);
 			}
 		})

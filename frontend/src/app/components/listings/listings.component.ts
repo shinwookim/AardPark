@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MapViewComponent } from '../map-view/map-view.component';
+import { ApiService } from '../../services/api.service';
+import { ParkingSpot } from '../../data-classes/ParkingSpot';
 
 interface ParkingListing {
   id: number;
@@ -65,12 +67,17 @@ export class ListingsComponent implements OnInit {
     }
   ];
 
-  constructor(private cdRef: ChangeDetectorRef) { }
+  constructor(private apiService: ApiService, private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
+		this.apiService._getParkingSpots("40", "-79", "100000000", "2000/01/01 01:01", "2100/01/01 01:01").subscribe({
+			next: (data: ParkingSpot[]) => {
+				console.log(data[0]);
+			}
+		})
   }
 
-  toggleView():void {
+  toggleView(): void {
     this.isListView = !this.isListView;
   }
 }
