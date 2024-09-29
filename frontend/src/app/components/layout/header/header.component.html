@@ -6,6 +6,7 @@
 			<div class="navigation-links">
 				<a routerLink="/home">Home</a>
 				<a routerLink="/listings">Listings</a>
+				<a routerLink="/create-listing">Create a Listing</a>
 				<button *ngIf="!user" (click)="login()">Login</button>
 				<div *ngIf="user" class="user-menu">
 					<img
