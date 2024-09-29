@@ -20,9 +20,9 @@ export class ApiService {
     	return this.http.get<ParkingSpot[]>(encodeURI(`${this.apiUrl}/parking-spot/?latitude=${lat}&longitude=${lon}&radius_in_miles=${radius}&start_time=${startTime}&end_time=${endTime}`));
   	}
 
-	_newParkingSpot(parkingSpot: string, start: string, end: string) {
-		let data = {"parking_spot": parkingSpot, "start_time": start, "end_time": end};
-		this.http.put(encodeURI(`${this.apiUrl}/parking-spot/`), data);
+	_newParkingSpot(name: string, desc: string, lat: string, long: string, username: string, start: string, end: string) {
+		let data = {"name": name, "description": desc, "latitude": lat, "longitude": long, "owner_username": username, "start_time": start, "end_time": end};
+		this.http.post(encodeURI(`${this.apiUrl}/parking-spot/`), data);
 	}
 
 	_newBooking(spotId: string, start: string, end: string, purchaser: string, seller: string) {
