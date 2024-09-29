@@ -62,7 +62,6 @@ def new_parking_spot(
     price: Annotated[
         float, Query(description="The hourly price of the parking spot")
         ],
-    taken: Annotated[bool, Query(description="Whether the spot is taken or not.")]=True,
 ):
     """
     Register a new parking spot.
@@ -83,6 +82,7 @@ def new_parking_spot(
                 "price": price,
                 "start_time": temp_start.strftime("%Y/%m/%d %H:%M"),
                 "end_time": temp_start_plus_one.strftime("%Y/%m/%d %H:%M"),
+                "taken": False
             }
         )
         temp_start = temp_start_plus_one
