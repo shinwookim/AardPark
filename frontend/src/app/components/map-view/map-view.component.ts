@@ -1,6 +1,7 @@
 /// <reference types="google.maps" />
 
 import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { ParkingListingsService } from '../../services/parking-listings.service';
 
 @Component({
   selector: 'app-map-view',
@@ -9,7 +10,8 @@ import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 })
 export class MapViewComponent implements OnInit {
   @ViewChild('mapContainer', { static: true }) mapContainer!: ElementRef;
-  @Input() parkingListings: any[] = [];
+
+	constructor(private parkingListingsService: ParkingListingsService) {}
 
   ngOnInit() {
     this.initMap();
@@ -18,25 +20,33 @@ export class MapViewComponent implements OnInit {
   initMap() {
     const mapOptions: google.maps.MapOptions = {
       center: { lat: 40.7128, lng: -74.0060 }, // New York City coordinates
-      zoom: 12
+      zoom: 12,
+			streetViewControl: false
     };
 
     const map = new google.maps.Map(this.mapContainer.nativeElement, mapOptions);
 
-    this.parkingListings.forEach(listing => {
-      const marker = new google.maps.Marker({
-        position: { lat: listing.lat, lng: listing.lng },
-        map: map,
-        title: listing.name
-      });
-
-      const infoWindow = new google.maps.InfoWindow({
-        content: `<h3>${listing.name}</h3><p>${listing.address}</p><p>$${listing.price}/hr</p>`
-      });
-
-      marker.addListener('click', () => {
-        infoWindow.open(map, marker);
-      });
+    this.parkingListingsService.getParkingListings().subscribe({
+			next: (listings) => {
+				listings.forEach(listing => {
+					const marker = new google.maps.Marker({
+						position: { lat: listing.location.coordinates[0], lng: listing.location.coordinates[1] },
+						map: map,
+						title: listing.title
+					});
+		
+					const infoWindow = new google.maps.InfoWindow({
+						content: `
+						<h3>${listing.title}</h3>
+						<p>$${listing.price}/hr</p>
+						`
+					});
+		
+					marker.addListener('click', () => {
+						infoWindow.open(map, marker);
+					});
+				});
+			}
     });
   }
 }
