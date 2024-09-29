@@ -43,8 +43,8 @@ def get_parking_spot(
         "end_time": {"$lte": end_time} if end_time else {"$exists": True}, 
         "taken": False
     }
-    availability_query_result = list(ParkingSpot.find(query, {{"_id": 0}, {"taken": 0}}))
-    return list(availability_query_result)
+    query_result = list(ParkingSpot.find(query, {{"_id": 0}, {"taken": 0}}))
+    return list(query_result)
 
 
 @router.post("/parking-spot/")
@@ -94,7 +94,7 @@ def new_parking_spot(
 @router.put("/parking_spot_availability")
 def update_parking_spot_availabit(
     parking_spot: Annotated[
-        str, Query(description="The ID of the parking spot to add to the availability.")
+        str, Query(description="The ID of the parking spot to remove availability from.")
     ],
     start_time: Annotated[
         str, Query(description="The start time of the availability.")
@@ -104,7 +104,7 @@ def update_parking_spot_availabit(
     """Sets the parking spot to taken"""
 
     query = {
-        "parking_spot": {"$eq": parking_spot},
+        "parking_spot": {"$eq": ObjectId(parking_spot)},
         "start_time": {"$gte": start_time},
         "end_time": {"$lte": end_time},
     }
